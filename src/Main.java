@@ -1,5 +1,17 @@
+import com.formdev.flatlaf.intellijthemes.FlatDraculaIJTheme;
+
+import javax.swing.*;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello World");
+        try {
+            UIManager.setLookAndFeel(new FlatDraculaIJTheme());
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            new Openfream().Setframe();
+        });
+        MenuPanel menu = new MenuPanel();
     }
 }
