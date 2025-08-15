@@ -1,17 +1,16 @@
-import com.formdev.flatlaf.intellijthemes.FlatDraculaIJTheme;
+import com.formdev.flatlaf.intellijthemes.FlatSolarizedLightIJTheme;
+
+import app.MainMenu;
 
 import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
         try {
-            UIManager.setLookAndFeel(new FlatDraculaIJTheme());
-        } catch (UnsupportedLookAndFeelException e) {
+            UIManager.setLookAndFeel(new FlatSolarizedLightIJTheme());
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            new Openfream().Setframe();
-        });
-        MenuPanel menu = new MenuPanel();
+        SwingUtilities.invokeLater(() -> new MainMenu().setVisible(true));
     }
 }
