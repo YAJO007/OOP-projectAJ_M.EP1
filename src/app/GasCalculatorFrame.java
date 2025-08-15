@@ -2,7 +2,7 @@ package app;
 
 import model.GasCalculator;
 import model.GasDataLoader;
-import util.TableColorRenderer;
+import util.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
