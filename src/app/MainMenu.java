@@ -1,108 +1,75 @@
 package app;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class MainMenu extends JFrame {
 
     public MainMenu() {
-        setupFrame();
-        addTitle();
-        addButtonPanel();
-
-    }
-
-    // ===== ตั้งค่าหน้าต่างหลัก =====
-    private void setupFrame() {
+        // ===== ตั้งค่าหน้าต่างหลัก =====
         setTitle("CAT DRILLING MENU");
         setSize(900, 600);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null); // เปิดกลางจอ
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-        getContentPane().setBackground(new Color(211, 172, 246)); // ฟ้าอ่อน
-    }
+        getContentPane().setBackground(new Color(97, 95, 95));
 
-    // ===== เพิ่มหัวข้อ =====
-    private void addTitle() {
+        // ===== หัวข้อ =====
         JLabel titleLabel = new JLabel("CAT DRILLING", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 36));
-        titleLabel.setForeground(new Color(0, 0, 0)); // ฟ้าเข้ม
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 36));
+        titleLabel.setForeground(Color.WHITE);
         add(titleLabel, BorderLayout.NORTH);
 
-        ImageIcon logoIcon = new ImageIcon("photo/logo.png"); // ใส่ path ของไฟล์โลโก้
+        // ===== โลโก้ (ตรงกลาง) =====
+        ImageIcon logoIcon = new ImageIcon("photo/logo.png");
         Image originalImage = logoIcon.getImage();
-
-        // ปรับขนาดภาพ
-        Image resizedImage = originalImage.getScaledInstance(600, 600, Image.SCALE_SMOOTH);
-        ImageIcon resizedIcon = new ImageIcon(resizedImage); // สร้าง ImageIcon ใหม่จากภาพที่ปรับขนาดแล้ว
-
-        // สร้าง JLabel ด้วยภาพที่ปรับขนาดแล้ว
-        JLabel logoLabel = new JLabel(resizedIcon, SwingConstants.CENTER);
+        Image resizedImage = originalImage.getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+        JLabel logoLabel = new JLabel(new ImageIcon(resizedImage), SwingConstants.CENTER);
         add(logoLabel, BorderLayout.CENTER);
-    }
 
-    // ===== Panel ปุ่มด้านขวา =====
-    private void addButtonPanel() {
+        // ===== ปุ่มด้านขวา =====
         JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 15, 15));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 50));
-        buttonPanel.setBackground(new Color(153, 0, 255, 60));
+        buttonPanel.setBackground(new Color(200, 200, 200, 60));
         buttonPanel.setPreferredSize(new Dimension(200, 0));
 
-        // ปุ่ม
-        JButton btnStart = createButton("START", new Color(60, 120, 220));
-        JButton btnAbout = createButton("ABOUT", new Color(255, 200, 0));
-        JButton btnExit = createButton("EXIT", new Color(220, 60, 60));
+        // ฟอนต์ที่ใช้กับปุ่มทั้งหมด
+        Font buttonFont = new Font("Arial", Font.BOLD, 18);
 
-        // Action ของแต่ละปุ่ม
-        btnStart.addActionListener(e -> openGasCalculator());
-        btnAbout.addActionListener(e -> showAboutDialog());
+        // ปุ่ม START
+        JButton btnStart = new JButton("START");
+        btnStart.setFont(buttonFont);
+        btnStart.setBackground(new Color(60, 120, 220));
+        btnStart.setForeground(Color.WHITE);
+
+        // ปุ่ม ABOUT
+        JButton btnAbout = new JButton("ABOUT");
+        btnAbout.setFont(buttonFont);
+        btnAbout.setBackground(new Color(255, 200, 0));
+        btnAbout.setForeground(Color.BLACK);
+
+        // ปุ่ม EXIT
+        JButton btnExit = new JButton("EXIT");
+        btnExit.setFont(buttonFont);
+        btnExit.setBackground(new Color(220, 60, 60));
+        btnExit.setForeground(Color.WHITE);
+
+        // ===== การทำงานของปุ่ม =====
+        btnStart.addActionListener(e -> {
+            new GasCalculatorFrame().setVisible(true);
+            dispose(); // ปิดหน้าเมนู
+        });
+
+        btnAbout.addActionListener(e -> {
+            new AboutDialog(this).setVisible(true);
+        });
+
         btnExit.addActionListener(e -> System.exit(0));
 
-        // ใส่ปุ่มลง panel
+        // ===== ใส่ปุ่มลงใน panel =====
         buttonPanel.add(btnStart);
         buttonPanel.add(btnAbout);
         buttonPanel.add(btnExit);
 
         add(buttonPanel, BorderLayout.EAST);
     }
-
-    // ===== Action =====
-    private void openGasCalculator() {
-        new GasCalculatorFrame().setVisible(true);
-        dispose();
-    }
-
-    private void showAboutDialog() {
-        new AboutDialog(this).setVisible(true);
-    }
-
-    // ===== สร้างปุ่มพร้อมสีพื้นหลัง + hover effect =====
-    private JButton createButton(String text, Color bgColor) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        button.setOpaque(true);
-
-        button.setBackground(bgColor);
-        button.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(bgColor, 1, true), // ขอบมน
-                BorderFactory.createEmptyBorder(10, 20, 10, 20) // ขยาย padding
-        ));
-
-        // Hover effect
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor.darker());
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor);
-            }
-        });
-
-        return button;
-    }
-    //โลโกนะ
 }

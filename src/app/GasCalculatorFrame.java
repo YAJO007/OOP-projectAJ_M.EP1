@@ -11,7 +11,6 @@ import java.awt.*;
 import java.io.File;
 
 public class GasCalculatorFrame extends JFrame {
-
     private JTable table;
     private JTextField fluidContactField;
     private GasCalculator calculator;
@@ -35,19 +34,18 @@ public class GasCalculatorFrame extends JFrame {
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBackground(Color.WHITE);
-        leftPanel.setPreferredSize(new Dimension(320, 0));
+        leftPanel.setPreferredSize(new Dimension(340, 0));
         leftPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
                 BorderFactory.createEmptyBorder(20, 20, 20, 20)
         ));
 
-        // ✅ ปุ่มที่เท่ากันทั้งหมด
-        JButton btnLoad   = createFixedButton("Open File", new Color(140, 0, 255), Color.WHITE);
-        JButton btnChange = createFixedButton("Change",    new Color(40, 167, 69), Color.WHITE);
+        // ✅ ปุ่ม
+        JButton btnLoad   = createFixedButton("OPEN FILE", new Color(140, 0, 255), Color.WHITE);
+        JButton btnChange = createFixedButton("CHANGE",    new Color(40, 167, 69), Color.WHITE);
         JButton btnReset  = createFixedButton("RESET",     new Color(220, 53, 69), Color.WHITE);
         JButton btnCast   = createFixedButton("SUMMARY",   new Color(255, 193, 7), Color.WHITE);
 
-        // ตั้งปุ่มให้อยู่ตรงกลาง
         btnLoad.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnChange.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnReset.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -63,30 +61,59 @@ public class GasCalculatorFrame extends JFrame {
         fluidContactField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         fluidContactField.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180), 1));
 
-        // Legend Panel
+        // ===== Legend Panel (เวอร์ชันง่าย + ตัวใหญ่) =====
         JPanel legendPanel = new JPanel();
-        legendPanel.setLayout(new BoxLayout(legendPanel, BoxLayout.PAGE_AXIS));
+        legendPanel.setLayout(new BoxLayout(legendPanel, BoxLayout.Y_AXIS));
         legendPanel.setBackground(Color.WHITE);
         legendPanel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(new Color(200, 200, 200)),
-                "Legend", 0, 0, new Font("Segoe UI", Font.BOLD, 30)
+                "Legend", 0, 0, new Font("Segoe UI", Font.BOLD, 28)
         ));
-        TextField red =  new TextField("No Gas");
-        red.setFont(new Font("Segoe UI", Font.PLAIN, 30));
 
-        TextField yellow =  new TextField("Gas Below 50%");
-        yellow.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+        // ✅ No Gas
+        JPanel noGasPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        noGasPanel.setBackground(Color.WHITE);
+        JLabel noGasColor = new JLabel();
+        noGasColor.setOpaque(true);
+        noGasColor.setBackground(new Color(255, 102, 102));
+        noGasColor.setPreferredSize(new Dimension(50, 30));
+        JLabel noGasLabel = new JLabel("No Gas");
+        noGasLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        noGasPanel.add(noGasColor);
+        noGasPanel.add(noGasLabel);
 
-        TextField green =  new TextField("Gas Above 50%");
-        green.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-        legendPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        legendPanel.add(createLegendItem(red.getText(),new Color(255, 102, 102)));
-        legendPanel.add(Box.createVerticalStrut(12));
-        legendPanel.add(createLegendItem(yellow.getText(), new Color(255, 223, 128)));
-        legendPanel.add(Box.createVerticalStrut(12));
-        legendPanel.add(createLegendItem(green.getText(), new Color(144, 238, 144)));
+        // ✅ Gas Below 50%
+        JPanel belowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        belowPanel.setBackground(Color.WHITE);
+        JLabel belowColor = new JLabel();
+        belowColor.setOpaque(true);
+        belowColor.setBackground(new Color(255, 223, 128));
+        belowColor.setPreferredSize(new Dimension(50, 30));
+        JLabel belowLabel = new JLabel("Gas Below <50%");
+        belowLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        belowPanel.add(belowColor);
+        belowPanel.add(belowLabel);
 
-        // Add components to left panel
+        // ✅ Gas Above 50%
+        JPanel abovePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        abovePanel.setBackground(Color.WHITE);
+        JLabel aboveColor = new JLabel();
+        aboveColor.setOpaque(true);
+        aboveColor.setBackground(new Color(144, 238, 144));
+        aboveColor.setPreferredSize(new Dimension(50, 30));
+        JLabel aboveLabel = new JLabel("Gas Above >=50%");
+        aboveLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        abovePanel.add(aboveColor);
+        abovePanel.add(aboveLabel);
+
+        // ใส่ทั้งหมดใน Legend Panel
+        legendPanel.add(noGasPanel);
+        legendPanel.add(Box.createVerticalStrut(15));
+        legendPanel.add(belowPanel);
+        legendPanel.add(Box.createVerticalStrut(15));
+        legendPanel.add(abovePanel);
+
+        // ===== Add components to left panel =====
         leftPanel.add(btnLoad);
         leftPanel.add(Box.createVerticalStrut(25));
         leftPanel.add(fluidLabel);
@@ -129,20 +156,12 @@ public class GasCalculatorFrame extends JFrame {
         catLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
         rightPanel.add(catLabel, BorderLayout.NORTH);
 
-
-
-        ImageIcon logoIcon = new ImageIcon("photo/logo.png"); // ใส่ path ของไฟล์โลโก้
+        ImageIcon logoIcon = new ImageIcon("photo/logo.png");
         Image originalImage = logoIcon.getImage();
-
-        // ปรับขนาดภาพ
         Image resizedImage = originalImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-        ImageIcon resizedIcon = new ImageIcon(resizedImage); // สร้าง ImageIcon ใหม่จากภาพที่ปรับขนาดแล้ว
-
-        // สร้าง JLabel ด้วยภาพที่ปรับขนาดแล้ว
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
         JLabel logoLabel = new JLabel(resizedIcon, SwingConstants.CENTER);
         rightPanel.add(logoLabel, BorderLayout.CENTER);
-
-
 
         // ===== Layout Assembly =====
         mainPanel.add(leftPanel, BorderLayout.WEST);
@@ -170,13 +189,11 @@ public class GasCalculatorFrame extends JFrame {
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // ✅ ขนาดคงที่ทุกปุ่ม
         Dimension fixedSize = new Dimension(200, 45);
         button.setPreferredSize(fixedSize);
         button.setMaximumSize(fixedSize);
         button.setMinimumSize(fixedSize);
 
-        // Hover Effect
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(bgColor.darker());
@@ -185,26 +202,7 @@ public class GasCalculatorFrame extends JFrame {
                 button.setBackground(bgColor);
             }
         });
-
         return button;
-    }
-
-    private JPanel createLegendItem(String text, Color color) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
-        panel.setBackground(Color.WHITE);
-
-        JLabel colorBox = new JLabel();
-        colorBox.setOpaque(true);
-        colorBox.setBackground(color);
-        colorBox.setPreferredSize(new Dimension(35, 20));
-        colorBox.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150)));
-
-        JLabel textLabel = new JLabel(text);
-        textLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-
-        panel.add(colorBox);
-        panel.add(textLabel);
-        return panel;
     }
 
     private void openTxtFile() {
@@ -246,9 +244,15 @@ public class GasCalculatorFrame extends JFrame {
                 Component c = super.getTableCellRendererComponent(tbl, value, isSelected, hasFocus, row, column);
                 if (value instanceof Number) {
                     double val = ((Number) value).doubleValue();
-                    if (val == 0) c.setBackground(new Color(255, 102, 102));
-                    else if (val < 50) c.setBackground(new Color(255, 223, 128));
-                    else c.setBackground(new Color(144, 238, 144));
+                    if (val == 0) {
+                        c.setBackground(new Color(255, 102, 102));
+                    }
+                    else if (val < 50) {
+                        c.setBackground(new Color(255, 223, 128));
+                    }
+                    else {
+                        c.setBackground(new Color(144, 238, 144));
+                    }
                 } else {
                     c.setBackground(Color.WHITE);
                 }

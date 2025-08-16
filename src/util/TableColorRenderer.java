@@ -11,12 +11,16 @@ public class TableColorRenderer extends DefaultTableCellRenderer {
             JTable table, Object value, boolean isSelected,
             boolean hasFocus, int row, int column) {
 
-        // แปลงค่าที่ได้มาให้เป็นตัวเลขทศนิยม
-        double percent = (double) value;
-
-        // สร้าง component ของ cell ตามค่าเดิมก่อน
+        // เรียกใช้ของเดิมก่อน
         Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        // เปลี่ยนสีตามช่วงค่า
+
+        // แปลงค่าเป็น double (ถ้า value ไม่ใช่ double จะเป็น 0)
+        double percent = 0;
+        if (value instanceof Number) {
+            percent = ((Number) value).doubleValue();
+        }
+
+        // เปลี่ยนสีตามค่าเปอร์เซ็นต์
         if (percent <= 0) {
             cell.setBackground(Color.RED);
         } else if (percent < 50) {
@@ -24,7 +28,8 @@ public class TableColorRenderer extends DefaultTableCellRenderer {
         } else {
             cell.setBackground(Color.GREEN);
         }
-        // จัดให้อยู่กึ่งกลาง + แสดงผลแบบ 1 ตำแหน่งทศนิยมพร้อมเครื่องหมาย %
+
+        // จัดข้อความให้อยู่กึ่งกลาง และแสดงเป็น "xx.x%"
         setHorizontalAlignment(SwingConstants.CENTER);
         setText(String.format("%.1f%%", percent));
 

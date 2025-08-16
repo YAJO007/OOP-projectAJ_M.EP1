@@ -2,41 +2,40 @@ package model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GasDataLoader {
     private double[][] data;
 
+    // โหลดไฟล์ข้อมูล
     public void load(File file) {
-        try (Scanner sc = new Scanner(file)) {
-            int size = (int) Math.sqrt(countValues(file));
-            data = new double[size][size];
+        ArrayList<Double> values = new ArrayList<>();
 
-            for (int r = 0; r < size; r++) {
-                for (int c = 0; c < size; c++) {
-                    data[r][c] = sc.nextDouble();
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private int countValues(File file) {
-        int count = 0;
         try (Scanner sc = new Scanner(file)) {
             while (sc.hasNextDouble()) {
-                sc.nextDouble();
-                count++;
+                values.add(sc.nextDouble());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            // หาขนาดตาราง NxN
+            int size = (int) Math.sqrt(values.size());
+            data = new double[size][size];
+
+            int index = 0;
+            for (int r = 0; r < size; r++) {
+                for (int c = 0; c < size; c++) {
+                    data[r][c] = values.get(index);
+                    index++;
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("ไม่พบไฟล์: " + file.getName());
         }
-        return count;
     }
 
+    // คืนค่า data ให้ class อื่นใช้
     public double[][] getData() {
         return data;
     }
-
 }

@@ -2,68 +2,65 @@ package app;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
 
 public class AboutDialog extends JDialog {
 
     public AboutDialog(JFrame parent) {
         super(parent, "About", true);
         setSize(800, 500);
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(null);
 
-        JPanel mainPanel = new JPanel(new GridLayout(1, 3, 15, 0));
+        // ====== Main Panel ======
+        JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 20));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        mainPanel.setBackground(Color.WHITE);
 
-
+        // เพิ่มสมาชิกแต่ละคน
         mainPanel.add(createMemberCard(
                 "Valentin Nokiara",
                 "ID: 67011212135",
-                "position: Programmer",
+                "Position: Programmer",
                 "photo/walen1.jpg"
         ));
 
         mainPanel.add(createMemberCard(
                 "Thanatut Saengchan",
                 "ID: 67011212027",
-                "position: Programmer",
+                "Position: Programmer",
                 "photo/dunk.jpg"
         ));
 
         mainPanel.add(createMemberCard(
-                "Saranon suaksanlert",
+                "Saranon Suaksanlert",
                 "ID: 67011212137",
-                "position: Programmer",
+                "Position: Programmer",
                 "photo/toe.jpg"
         ));
 
         add(mainPanel, BorderLayout.CENTER);
     }
 
-    // 🔹 ฟังก์ชันสร้าง Card สมาชิกแต่ละคน
+    // ===== ฟังก์ชันสร้าง Card สมาชิก =====
     private JPanel createMemberCard(String name, String id, String role, String imagePath) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.GRAY, 2, true),
-                BorderFactory.createEmptyBorder(15, 15, 15, 15)
-        ));
-        panel.setBackground(new Color(250, 250, 250));
+        panel.setPreferredSize(new Dimension(200, 250)); // กำหนดขนาดการ์ด
+        panel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+        panel.setBackground(Color.WHITE);
 
-        JLabel imgLabel = new JLabel();
-        imgLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        imgLabel.setPreferredSize(new Dimension(50, 500));
-
+        // โหลดรูป
+        JLabel imgLabel;
         try {
-            BufferedImage img = ImageIO.read(new File(imagePath));
-            Image scaledImg = getScaledImage(img, 200, 200); // 🔹 ใช้ฟังก์ชัน Resize แบบชัด
-            imgLabel.setIcon(new ImageIcon(scaledImg));
+            ImageIcon icon = new ImageIcon(imagePath);
+            Image scaled = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+            imgLabel = new JLabel(new ImageIcon(scaled));
         } catch (Exception e) {
-            imgLabel.setText("[No Image]");
+            imgLabel = new JLabel("[No Image]");
             imgLabel.setHorizontalAlignment(SwingConstants.CENTER);
         }
+        imgLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // ข้อความ
         JLabel nameLabel = new JLabel(name, SwingConstants.CENTER);
         nameLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -74,9 +71,10 @@ public class AboutDialog extends JDialog {
 
         JLabel roleLabel = new JLabel(role, SwingConstants.CENTER);
         roleLabel.setFont(new Font("Segoe UI", Font.ITALIC, 14));
-        roleLabel.setForeground(new Color(70, 70, 70));
+        roleLabel.setForeground(Color.DARK_GRAY);
         roleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // เพิ่มเข้าการ์ด
         panel.add(imgLabel);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(nameLabel);
@@ -84,20 +82,5 @@ public class AboutDialog extends JDialog {
         panel.add(roleLabel);
 
         return panel;
-    }
-
-    // 🔹 ฟังก์ชัน Resize รูปแบบคุณภาพสูง
-    private Image getScaledImage(Image srcImg, int w, int h) {
-        BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = resizedImg.createGraphics();
-
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-        g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        g2.drawImage(srcImg, 0, 0, w, h, null);
-        g2.dispose();
-
-        return resizedImg;
     }
 }
