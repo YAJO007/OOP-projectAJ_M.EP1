@@ -2,14 +2,16 @@ package app;
 
 import model.GasCalculator;
 import model.GasDataLoader;
-import util.*;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.io.File;
 
 public class GasCalculatorFrame extends JFrame {
+
     private JTable table;
     private JTextField fluidContactField;
     private GasCalculator calculator;
@@ -17,62 +19,202 @@ public class GasCalculatorFrame extends JFrame {
 
     public GasCalculatorFrame() {
         setTitle("Jewel Suite - Gas Volume Calculator");
-        setSize(700, 500);
+        setSize(1400, 850); // ขนาดใหญ่ขึ้น
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         calculator = new GasCalculator();
         loader = new GasDataLoader();
 
-        JPanel topPanel = new JPanel();
-        JButton btnLoad = new JButton("โหลดไฟล์ dept.txt");
-        fluidContactField = new JTextField("2.5", 5);
-        JButton btnCalc = new JButton("คำนวณ");
+        // ===== Main Panel =====
+        JPanel mainPanel = new JPanel(new BorderLayout(20, 20));
+        mainPanel.setBackground(new Color(245, 245, 245));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        topPanel.add(btnLoad);
-        topPanel.add(new JLabel("Fluid Contact (km):"));
-        topPanel.add(fluidContactField);
-        topPanel.add(btnCalc);
+        // ===== Left Control Panel =====
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.setBackground(Color.WHITE);
+        leftPanel.setPreferredSize(new Dimension(320, 0));
+        leftPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
+                BorderFactory.createEmptyBorder(20, 20, 20, 20)
+        ));
 
-        add(topPanel, BorderLayout.NORTH);
+        JButton btnLoad = createModernButton("Open File", new Color(140, 0, 255), Color.WHITE);
+
+        JLabel fluidLabel = new JLabel("Fluid Contact Depth (km)");
+        fluidLabel.setForeground(Color.DARK_GRAY);
+        fluidLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+
+        fluidContactField = new JTextField("2.5");
+        fluidContactField.setPreferredSize(new Dimension(200, 40));
+        fluidContactField.setMaximumSize(new Dimension(200, 40));
+        fluidContactField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        fluidContactField.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180), 1));
+
+        JButton btnChange = createModernButton("Change", new Color(40, 167, 69), Color.BLACK);
+        JButton btnReset = createModernButton("RESET", new Color(220, 53, 69), Color.BLACK);
+        JButton btnCast = createModernButton("SUMMARY", new Color(255, 193, 7), Color.BLACK);
+
+        // Legend Panel
+        JPanel legendPanel = new JPanel();
+        legendPanel.setLayout(new BoxLayout(legendPanel, BoxLayout.Y_AXIS));
+        legendPanel.setBackground(Color.WHITE);
+        legendPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)), "Legend", 0, 0, new Font("Segoe UI", Font.BOLD, 14)));
+
+        legendPanel.add(createLegendItem("No Gas", new Color(255, 102, 102)));
+        legendPanel.add(Box.createVerticalStrut(12));
+        legendPanel.add(createLegendItem("Gas Below 50%", new Color(255, 223, 128)));
+        legendPanel.add(Box.createVerticalStrut(12));
+        legendPanel.add(createLegendItem("Gas Above 50%", new Color(144, 238, 144)));
+
+        // Add components to left panel
+        leftPanel.add(btnLoad);
+        leftPanel.add(Box.createVerticalStrut(25));
+        leftPanel.add(fluidLabel);
+        leftPanel.add(Box.createVerticalStrut(8));
+        leftPanel.add(fluidContactField);
+        leftPanel.add(Box.createVerticalStrut(20));
+        leftPanel.add(btnChange);
+        leftPanel.add(Box.createVerticalStrut(12));
+        leftPanel.add(btnReset);
+        leftPanel.add(Box.createVerticalStrut(12));
+        leftPanel.add(btnCast);
+        leftPanel.add(Box.createVerticalStrut(25));
+        leftPanel.add(legendPanel);
+
+        // ===== Center Table Panel =====
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setBackground(Color.WHITE);
+        tablePanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
 
         table = new JTable();
-        add(new JScrollPane(table), BorderLayout.CENTER);
+        table.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        table.setRowHeight(38);
+        table.setGridColor(new Color(220, 220, 220));
+        table.setBackground(Color.WHITE);
 
-        btnLoad.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                File file = fileChooser.getSelectedFile();
-                loader.load(file);
-                calculator.setBaseHorizon(loader.getData());
-                JOptionPane.showMessageDialog(this, "โหลดไฟล์เรียบร้อย");
-            }
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        tablePanel.add(scrollPane, BorderLayout.CENTER);
+
+        // ===== Right Panel =====
+        JPanel rightPanel = new JPanel(new BorderLayout());
+        rightPanel.setPreferredSize(new Dimension(180, 0));
+        rightPanel.setBackground(Color.WHITE);
+
+        JLabel catLabel = new JLabel("CAT DRILLING", SwingConstants.CENTER);
+        catLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        catLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+        rightPanel.add(catLabel, BorderLayout.NORTH);
+
+        // ===== Layout Assembly =====
+        mainPanel.add(leftPanel, BorderLayout.WEST);
+        mainPanel.add(tablePanel, BorderLayout.CENTER);
+        mainPanel.add(rightPanel, BorderLayout.EAST);
+
+        add(mainPanel);
+
+        // ===== Button Actions =====
+        btnLoad.addActionListener(e -> openTxtFile());
+        btnChange.addActionListener(e -> calculateGas());
+        btnReset.addActionListener(e -> resetTable());
+
+        btnCast.addActionListener(e -> {
+            SummaryDialog dialog = new SummaryDialog(this, table);
+            dialog.setVisible(true);
         });
 
-        btnCalc.addActionListener(e -> {
-            try {
-                double fluidContact = Double.parseDouble(fluidContactField.getText()) * 1000; // km → m
-                double[][] percent = calculator.calculateGas(fluidContact);
-                showTable(percent);
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "กรุณากรอกตัวเลขถูกต้อง");
-            }
-        });
+    }
+
+
+    private JButton createModernButton(String text, Color bgColor, Color textColor) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        button.setForeground(textColor);
+        button.setBackground(bgColor);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(12, 25, 12, 25));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return button;
+    }
+
+    private JPanel createLegendItem(String text, Color color) {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        panel.setBackground(Color.WHITE);
+
+        JLabel colorBox = new JLabel();
+        colorBox.setOpaque(true);
+        colorBox.setBackground(color);
+        colorBox.setPreferredSize(new Dimension(35, 20));
+        colorBox.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150)));
+
+        JLabel textLabel = new JLabel(text);
+        textLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+
+        panel.add(colorBox);
+        panel.add(textLabel);
+        return panel;
+    }
+
+    private void openTxtFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            loader.load(file);
+            calculator.setBaseHorizon(loader.getData());
+            JOptionPane.showMessageDialog(this, "Loaded: " + file.getName());
+        }
+    }
+
+    private void calculateGas() {
+        try {
+            double fluidContact = Double.parseDouble(fluidContactField.getText()) * 1000;
+            double[][] percent = calculator.calculateGas(fluidContact);
+            showTable(percent);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "กรุณากรอกตัวเลขถูกต้อง");
+        }
+    }
+
+    private void resetTable() {
+        table.setModel(new DefaultTableModel());
     }
 
     private void showTable(double[][] percent) {
         int rows = percent.length;
         int cols = percent[0].length;
-
         DefaultTableModel model = new DefaultTableModel(rows, cols);
         table.setModel(model);
 
-        table.setDefaultRenderer(Object.class, new TableColorRenderer());
-
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                table.setValueAt(percent[r][c], r, c);
+        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable tbl, Object value, boolean isSelected,
+                                                           boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(tbl, value, isSelected, hasFocus, row, column);
+                if (value instanceof Number) {
+                    double val = ((Number) value).doubleValue();
+                    if (val == 0) c.setBackground(new Color(255, 102, 102));
+                    else if (val < 50) c.setBackground(new Color(255, 223, 128));
+                    else c.setBackground(new Color(144, 238, 144));
+                } else {
+                    c.setBackground(Color.WHITE);
+                }
+                setForeground(Color.BLACK);
+                setHorizontalAlignment(SwingConstants.CENTER);
+                setFont(new Font("Segoe UI", Font.BOLD, 16));
+                return c;
             }
-        }
+        });
+
+        for (int r = 0; r < rows; r++)
+            for (int c = 0; c < cols; c++)
+                table.setValueAt(percent[r][c], r, c);
     }
 }
