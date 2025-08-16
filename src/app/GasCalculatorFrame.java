@@ -18,7 +18,7 @@ public class GasCalculatorFrame extends JFrame {
     private GasDataLoader loader;
 
     public GasCalculatorFrame() {
-        setTitle("Jewel Suite - Gas Volume Calculator");
+        setTitle("CAT DRILLING");
         setSize(1400, 850); // ขนาดใหญ่ขึ้น
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,28 +41,29 @@ public class GasCalculatorFrame extends JFrame {
                 BorderFactory.createEmptyBorder(20, 20, 20, 20)
         ));
 
-        JButton btnLoad = createModernButton("Open File", new Color(140, 0, 255), Color.WHITE);
+        // ✅ ปุ่มที่เท่ากันทั้งหมด
+        JButton btnLoad   = createFixedButton("Open File", new Color(140, 0, 255), Color.WHITE);
+        JButton btnChange = createFixedButton("Change",    new Color(40, 167, 69), Color.WHITE);
+        JButton btnReset  = createFixedButton("RESET",     new Color(220, 53, 69), Color.WHITE);
+        JButton btnCast   = createFixedButton("SUMMARY",   new Color(255, 193, 7), Color.WHITE);
 
-        JLabel fluidLabel = new JLabel("Fluid Contact Depth (km)");
+        JLabel fluidLabel = new JLabel("Fluid Enter(M)");
         fluidLabel.setForeground(Color.DARK_GRAY);
         fluidLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 
         fluidContactField = new JTextField("2.5");
-        fluidContactField.setPreferredSize(new Dimension(200, 40));
         fluidContactField.setMaximumSize(new Dimension(200, 40));
         fluidContactField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         fluidContactField.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180), 1));
-
-        JButton btnChange = createModernButton("Change", new Color(40, 167, 69), Color.BLACK);
-        JButton btnReset = createModernButton("RESET", new Color(220, 53, 69), Color.BLACK);
-        JButton btnCast = createModernButton("SUMMARY", new Color(255, 193, 7), Color.BLACK);
 
         // Legend Panel
         JPanel legendPanel = new JPanel();
         legendPanel.setLayout(new BoxLayout(legendPanel, BoxLayout.Y_AXIS));
         legendPanel.setBackground(Color.WHITE);
-        legendPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)), "Legend", 0, 0, new Font("Segoe UI", Font.BOLD, 14)));
-
+        legendPanel.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                "Legend", 0, 0, new Font("Segoe UI", Font.BOLD, 14)
+        ));
         legendPanel.add(createLegendItem("No Gas", new Color(255, 102, 102)));
         legendPanel.add(Box.createVerticalStrut(12));
         legendPanel.add(createLegendItem("Gas Below 50%", new Color(255, 223, 128)));
@@ -123,23 +124,37 @@ public class GasCalculatorFrame extends JFrame {
         btnLoad.addActionListener(e -> openTxtFile());
         btnChange.addActionListener(e -> calculateGas());
         btnReset.addActionListener(e -> resetTable());
-
         btnCast.addActionListener(e -> {
             SummaryDialog dialog = new SummaryDialog(this, table);
             dialog.setVisible(true);
         });
-
     }
 
-
-    private JButton createModernButton(String text, Color bgColor, Color textColor) {
+    // ===== ปุ่มสวย + เท่ากัน + Hover Effect =====
+    private JButton createFixedButton(String text, Color bgColor, Color textColor) {
         JButton button = new JButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 16));
         button.setForeground(textColor);
         button.setBackground(bgColor);
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(12, 25, 12, 25));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        // ✅ ขนาดคงที่ทุกปุ่ม
+        Dimension fixedSize = new Dimension(200, 45);
+        button.setPreferredSize(fixedSize);
+        button.setMaximumSize(fixedSize);
+        button.setMinimumSize(fixedSize);
+
+        // Hover Effect
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(bgColor.darker());
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(bgColor);
+            }
+        });
+
         return button;
     }
 

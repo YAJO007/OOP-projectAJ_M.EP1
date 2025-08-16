@@ -56,7 +56,7 @@ public class SummaryDialog extends JDialog {
 
         add(new JScrollPane(textArea), BorderLayout.CENTER);
 
-        // Panel สำหรับปุ่มสีแดง, ส้ม, เขียว (ใช้ JPanel + JLabel แทน HTML)
+        // Panel สำหรับปุ่มสีแดง, ส้ม, เขียว
         JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 10, 10));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
