@@ -40,14 +40,11 @@ public class SummaryDialog extends JDialog {
 
         // Text Area สำหรับสรุปแบบละเอียด
         JTextArea textArea = new JTextArea(
-                String.format(
-                        "Gas Volume Summary\n\n" +
-                                "Total Cells: %d\n" +
-                                "No Gas: %d cells (%.2f%%)\n" +
-                                "Gas Below 50%%: %d cells (%.2f%%)\n" +
-                                "Gas Above 50%%: %d cells (%.2f%%)",
-                        total, noGas, pNoGas, gasBelow50, pBelow, gasAbove50, pAbove
-                )
+                "Gas Volume Summary\n\n" +
+                        "Total Cells: " + total + "\n" +
+                        "No Gas: " + noGas + " cells (" + String.format("%.2f", pNoGas) + "%)\n" +
+                        "Gas Below 50%: " + gasBelow50 + " cells (" + String.format("%.2f", pBelow) + "%)\n" +
+                        "Gas Above 50%: " + gasAbove50 + " cells (" + String.format("%.2f", pAbove) + "%)"
         );
         textArea.setFont(new Font("Segoe UI", Font.BOLD, 16));
         textArea.setEditable(false);
@@ -59,29 +56,34 @@ public class SummaryDialog extends JDialog {
 
         add(new JScrollPane(textArea), BorderLayout.CENTER);
 
-        // Panel สำหรับปุ่มสีแดง, ส้ม, เขียว
+        // Panel สำหรับปุ่มสีแดง, ส้ม, เขียว (ใช้ JPanel + JLabel แทน HTML)
         JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 10, 10));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JButton redButton = new JButton(String.format("<html>No Gas<br>%d (%.2f%%)</html>", noGas, pNoGas));
-        redButton.setBackground(Color.RED);
-        redButton.setForeground(Color.WHITE);
-        redButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-
-        JButton orangeButton = new JButton(String.format("<html>Gas < 50%<br>%d (%.2f%%)</html>", gasBelow50, pBelow));
-        orangeButton.setBackground(Color.ORANGE);
-        orangeButton.setForeground(Color.BLACK);
-        orangeButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-
-        JButton greenButton = new JButton(String.format("<html>Gas > 50%<br>%d (%.2f%%)</html>", gasAbove50, pAbove));
-        greenButton.setBackground(Color.GREEN.darker());
-        greenButton.setForeground(Color.WHITE);
-        greenButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-
-        buttonPanel.add(redButton);
-        buttonPanel.add(orangeButton);
-        buttonPanel.add(greenButton);
+        buttonPanel.add(createColorPanel("No Gas", noGas, pNoGas, Color.RED, Color.WHITE));
+        buttonPanel.add(createColorPanel("Gas < 50%", gasBelow50, pBelow, Color.ORANGE, Color.BLACK));
+        buttonPanel.add(createColorPanel("Gas > 50%", gasAbove50, pAbove, Color.GREEN.darker(), Color.WHITE));
 
         add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    // สร้าง Panel สำหรับแต่ละประเภท
+    private JPanel createColorPanel(String title, int count, double percent, Color bgColor, Color fgColor) {
+        JPanel panel = new JPanel();
+        panel.setBackground(bgColor);
+        panel.setLayout(new GridLayout(2, 1));
+
+        JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        titleLabel.setForeground(fgColor);
+
+        JLabel countLabel = new JLabel(count + " (" + String.format("%.2f", percent) + "%)", SwingConstants.CENTER);
+        countLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        countLabel.setForeground(fgColor);
+
+        panel.add(titleLabel);
+        panel.add(countLabel);
+
+        return panel;
     }
 }
