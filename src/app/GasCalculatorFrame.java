@@ -47,28 +47,44 @@ public class GasCalculatorFrame extends JFrame {
         JButton btnReset  = createFixedButton("RESET",     new Color(220, 53, 69), Color.WHITE);
         JButton btnCast   = createFixedButton("SUMMARY",   new Color(255, 193, 7), Color.WHITE);
 
+        // ตั้งปุ่มให้อยู่ตรงกลาง
+        btnLoad.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnChange.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnReset.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnCast.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         JLabel fluidLabel = new JLabel("Fluid Enter(M)");
+        fluidLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         fluidLabel.setForeground(Color.DARK_GRAY);
         fluidLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 
-        fluidContactField = new JTextField("2.5");
+        fluidContactField = new JTextField("2500");
         fluidContactField.setMaximumSize(new Dimension(200, 40));
         fluidContactField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         fluidContactField.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180), 1));
 
         // Legend Panel
         JPanel legendPanel = new JPanel();
-        legendPanel.setLayout(new BoxLayout(legendPanel, BoxLayout.Y_AXIS));
+        legendPanel.setLayout(new BoxLayout(legendPanel, BoxLayout.PAGE_AXIS));
         legendPanel.setBackground(Color.WHITE);
         legendPanel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(new Color(200, 200, 200)),
-                "Legend", 0, 0, new Font("Segoe UI", Font.BOLD, 14)
+                "Legend", 0, 0, new Font("Segoe UI", Font.BOLD, 30)
         ));
-        legendPanel.add(createLegendItem("No Gas", new Color(255, 102, 102)));
+        TextField red =  new TextField("No Gas");
+        red.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+
+        TextField yellow =  new TextField("Gas Below 50%");
+        yellow.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+
+        TextField green =  new TextField("Gas Above 50%");
+        green.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+        legendPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        legendPanel.add(createLegendItem(red.getText(),new Color(255, 102, 102)));
         legendPanel.add(Box.createVerticalStrut(12));
-        legendPanel.add(createLegendItem("Gas Below 50%", new Color(255, 223, 128)));
+        legendPanel.add(createLegendItem(yellow.getText(), new Color(255, 223, 128)));
         legendPanel.add(Box.createVerticalStrut(12));
-        legendPanel.add(createLegendItem("Gas Above 50%", new Color(144, 238, 144)));
+        legendPanel.add(createLegendItem(green.getText(), new Color(144, 238, 144)));
 
         // Add components to left panel
         leftPanel.add(btnLoad);
@@ -112,6 +128,21 @@ public class GasCalculatorFrame extends JFrame {
         catLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
         catLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
         rightPanel.add(catLabel, BorderLayout.NORTH);
+
+
+
+        ImageIcon logoIcon = new ImageIcon("photo/logo.png"); // ใส่ path ของไฟล์โลโก้
+        Image originalImage = logoIcon.getImage();
+
+        // ปรับขนาดภาพ
+        Image resizedImage = originalImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage); // สร้าง ImageIcon ใหม่จากภาพที่ปรับขนาดแล้ว
+
+        // สร้าง JLabel ด้วยภาพที่ปรับขนาดแล้ว
+        JLabel logoLabel = new JLabel(resizedIcon, SwingConstants.CENTER);
+        rightPanel.add(logoLabel, BorderLayout.CENTER);
+
+
 
         // ===== Layout Assembly =====
         mainPanel.add(leftPanel, BorderLayout.WEST);
@@ -190,11 +221,11 @@ public class GasCalculatorFrame extends JFrame {
 
     private void calculateGas() {
         try {
-            double fluidContact = Double.parseDouble(fluidContactField.getText()) * 1000;
+            double fluidContact = Double.parseDouble(fluidContactField.getText());
             double[][] percent = calculator.calculateGas(fluidContact);
             showTable(percent);
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "กรุณากรอกตัวเลขถูกต้อง");
+            JOptionPane.showMessageDialog(this, "Please enter a Right number");
         }
     }
 
