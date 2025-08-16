@@ -38,4 +38,5 @@ public class GasDataLoader {
     public double[][] getData() {
         return data;
     }
+
 }
