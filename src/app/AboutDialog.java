@@ -25,10 +25,10 @@ public class AboutDialog extends JDialog {
         ));
 
         mainPanel.add(createMemberCard(
-                "HEE1",
-                "ID: 1234",
-                "position: ",
-                "resources/member2.jpg"
+                "Thanatut Saengchan",
+                "ID: 67011212027",
+                "position: Programmer",
+                "photo/dunk.jpg"
         ));
 
         mainPanel.add(createMemberCard(
