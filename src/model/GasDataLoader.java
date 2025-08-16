@@ -30,7 +30,7 @@ public class GasDataLoader {
             }
 
         } catch (FileNotFoundException e) {
-            System.out.println("ไม่พบไฟล์: " + file.getName());
+            System.out.println("No File: " + file.getName());
         }
     }
 
