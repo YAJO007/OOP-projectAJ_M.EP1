@@ -10,6 +10,7 @@ public class MainMenu extends JFrame {
         setupFrame();
         addTitle();
         addButtonPanel();
+
     }
 
     // ===== ตั้งค่าหน้าต่างหลัก =====
@@ -29,6 +30,17 @@ public class MainMenu extends JFrame {
         titleLabel.setForeground(new Color(0, 0, 0)); // ฟ้าเข้ม
         titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
         add(titleLabel, BorderLayout.NORTH);
+
+        ImageIcon logoIcon = new ImageIcon("photo/logo.png"); // ใส่ path ของไฟล์โลโก้
+        Image originalImage = logoIcon.getImage();
+
+        // ปรับขนาดภาพ
+        Image resizedImage = originalImage.getScaledInstance(600, 600, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage); // สร้าง ImageIcon ใหม่จากภาพที่ปรับขนาดแล้ว
+
+        // สร้าง JLabel ด้วยภาพที่ปรับขนาดแล้ว
+        JLabel logoLabel = new JLabel(resizedIcon, SwingConstants.CENTER);
+        add(logoLabel, BorderLayout.CENTER);
     }
 
     // ===== Panel ปุ่มด้านขวา =====
@@ -93,25 +105,4 @@ public class MainMenu extends JFrame {
         return button;
     }
     //โลโกนะ
-    /*private void addTitle() {
-        // โหลดรูปภาพโลโก้
-        ImageIcon logoIcon = new ImageIcon("path/to/your/logo.png"); // ใส่ path ของไฟล์โลโก้
-        JLabel logoLabel = new JLabel(logoIcon, SwingConstants.CENTER);
-
-        // หัวข้อ
-        JLabel titleLabel = new JLabel("CAT DRILLING", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 36));
-        titleLabel.setForeground(new Color(0, 0, 0));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-
-        // Panel สำหรับโลโก้ + หัวข้อ
-        JPanel titlePanel = new JPanel(new BorderLayout());
-        titlePanel.setBackground(new Color(211, 172, 246));
-        titlePanel.add(logoLabel, BorderLayout.CENTER);
-        titlePanel.add(titleLabel, BorderLayout.SOUTH);
-        titlePanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
-
-        add(titlePanel, BorderLayout.NORTH);
-    }*/
-
 }
