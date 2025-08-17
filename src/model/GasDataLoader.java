@@ -13,9 +13,15 @@ public class GasDataLoader {
         ArrayList<Double> values = new ArrayList<>();
 
         try (Scanner sc = new Scanner(file)) {
-            while (sc.hasNextDouble()) {
-                values.add(sc.nextDouble());
+            while (sc.hasNext()) {
+                String token = sc.next();
+                try {
+                    double value = Double.parseDouble(token);
+                    values.add(value);
+                } catch (NumberFormatException e) {
+                }
             }
+
 
             // หาขนาดตาราง NxN
             int size = (int) Math.sqrt(values.size());
