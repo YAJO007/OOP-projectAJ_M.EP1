@@ -44,21 +44,19 @@ public class GasCalculatorFrame extends JFrame {
         JButton btnLoad   = createFixedButton("OPEN FILE", new Color(140, 0, 255), Color.WHITE);
         JButton btnChange = createFixedButton("CHANGE",    new Color(40, 167, 69), Color.WHITE);
         JButton btnReset  = createFixedButton("RESET",     new Color(220, 53, 69), Color.WHITE);
-        JButton btnCast   = createFixedButton("SUMMARY",   new Color(255, 193, 7), Color.WHITE);
 
         btnLoad.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnChange.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnReset.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnCast.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel fluidLabel = new JLabel("Fluid Enter(M)");
         fluidLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         fluidLabel.setForeground(Color.DARK_GRAY);
-        fluidLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        fluidLabel.setFont(new Font("font", Font.PLAIN, 16));
 
         fluidContactField = new JTextField("2500");
         fluidContactField.setMaximumSize(new Dimension(200, 40));
-        fluidContactField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        fluidContactField.setFont(new Font("font", Font.PLAIN, 16));
         fluidContactField.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180), 1));
 
         // ===== Legend Panel (เวอร์ชันง่าย + ตัวใหญ่) =====
@@ -67,7 +65,7 @@ public class GasCalculatorFrame extends JFrame {
         legendPanel.setBackground(Color.WHITE);
         legendPanel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(new Color(200, 200, 200)),
-                "Legend", 0, 0, new Font("Segoe UI", Font.BOLD, 28)
+                "Legend", 0, 0, new Font("font", Font.BOLD, 28)
         ));
 
         // ✅ No Gas
@@ -78,7 +76,7 @@ public class GasCalculatorFrame extends JFrame {
         noGasColor.setBackground(new Color(255, 102, 102));
         noGasColor.setPreferredSize(new Dimension(50, 30));
         JLabel noGasLabel = new JLabel("No Gas");
-        noGasLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        noGasLabel.setFont(new Font("font", Font.BOLD, 22));
         noGasPanel.add(noGasColor);
         noGasPanel.add(noGasLabel);
 
@@ -90,7 +88,7 @@ public class GasCalculatorFrame extends JFrame {
         belowColor.setBackground(new Color(255, 223, 128));
         belowColor.setPreferredSize(new Dimension(50, 30));
         JLabel belowLabel = new JLabel("Gas Below <50%");
-        belowLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        belowLabel.setFont(new Font("font", Font.BOLD, 22));
         belowPanel.add(belowColor);
         belowPanel.add(belowLabel);
 
@@ -102,7 +100,7 @@ public class GasCalculatorFrame extends JFrame {
         aboveColor.setBackground(new Color(144, 238, 144));
         aboveColor.setPreferredSize(new Dimension(50, 30));
         JLabel aboveLabel = new JLabel("Gas Above >=50%");
-        aboveLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        aboveLabel.setFont(new Font("font", Font.BOLD, 22));
         abovePanel.add(aboveColor);
         abovePanel.add(aboveLabel);
 
@@ -123,8 +121,6 @@ public class GasCalculatorFrame extends JFrame {
         leftPanel.add(btnChange);
         leftPanel.add(Box.createVerticalStrut(12));
         leftPanel.add(btnReset);
-        leftPanel.add(Box.createVerticalStrut(12));
-        leftPanel.add(btnCast);
         leftPanel.add(Box.createVerticalStrut(25));
         leftPanel.add(legendPanel);
 
@@ -137,7 +133,7 @@ public class GasCalculatorFrame extends JFrame {
         ));
 
         table = new JTable();
-        table.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        table.setFont(new Font("font", Font.PLAIN, 16));
         table.setRowHeight(38);
         table.setGridColor(new Color(220, 220, 220));
         table.setBackground(Color.WHITE);
@@ -152,7 +148,7 @@ public class GasCalculatorFrame extends JFrame {
         rightPanel.setBackground(Color.WHITE);
 
         JLabel catLabel = new JLabel("CAT DRILLING", SwingConstants.CENTER);
-        catLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        catLabel.setFont(new Font("font", Font.BOLD, 18));
         catLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
         rightPanel.add(catLabel, BorderLayout.NORTH);
 
@@ -174,16 +170,12 @@ public class GasCalculatorFrame extends JFrame {
         btnLoad.addActionListener(e -> openTxtFile());
         btnChange.addActionListener(e -> calculateGas());
         btnReset.addActionListener(e -> resetTable());
-        btnCast.addActionListener(e -> {
-            SummaryDialog dialog = new SummaryDialog(this, table);
-            dialog.setVisible(true);
-        });
     }
 
     // ===== ปุ่มสวย + เท่ากัน + Hover Effect =====
     private JButton createFixedButton(String text, Color bgColor, Color textColor) {
         JButton button = new JButton(text);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        button.setFont(new Font("font", Font.BOLD, 16));
         button.setForeground(textColor);
         button.setBackground(bgColor);
         button.setFocusPainted(false);
@@ -258,7 +250,7 @@ public class GasCalculatorFrame extends JFrame {
                 }
                 setForeground(Color.BLACK);
                 setHorizontalAlignment(SwingConstants.CENTER);
-                setFont(new Font("Segoe UI", Font.BOLD, 16));
+                setFont(new Font("font", Font.BOLD, 16));
                 return c;
             }
         });
