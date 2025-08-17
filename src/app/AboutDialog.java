@@ -15,28 +15,29 @@ public class AboutDialog extends JDialog {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         mainPanel.setBackground(Color.WHITE);
 
-        // เพิ่มสมาชิกแต่ละคน
-        mainPanel.add(createMemberCard(
+        mainPanel.add(createMemberCard
+                (
                 "Valentin Nokiara",
                 "ID: 67011212135",
                 "Position: Programmer",
                 "photo/walen1.jpg"
         ));
 
-        mainPanel.add(createMemberCard(
+        mainPanel.add(createMemberCard
+                (
                 "Thanatut Saengchan",
                 "ID: 67011212027",
                 "Position: Programmer",
                 "photo/dunk.jpg"
         ));
 
-        mainPanel.add(createMemberCard(
+        mainPanel.add(createMemberCard
+                (
                 "Saranon Suaksanlert",
                 "ID: 67011212137",
                 "Position: Programmer",
                 "photo/toe.jpg"
         ));
-
         add(mainPanel, BorderLayout.CENTER);
     }
 

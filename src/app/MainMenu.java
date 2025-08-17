@@ -6,7 +6,7 @@ import java.awt.*;
 public class MainMenu extends JFrame {
 
     public MainMenu() {
-        // ===== ตั้งค่าหน้าต่างหลัก =====
+        //หน้าหลักเด้อ
         setTitle("CAT DRILLING MENU");
         setSize(900, 600);
         setLocationRelativeTo(null); // เปิดกลางจอ
@@ -65,7 +65,6 @@ public class MainMenu extends JFrame {
 
         btnExit.addActionListener(e -> System.exit(0));
 
-        // ===== ใส่ปุ่มลงใน panel =====
         buttonPanel.add(btnStart);
         buttonPanel.add(btnAbout);
         buttonPanel.add(btnExit);
